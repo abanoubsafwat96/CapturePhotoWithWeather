@@ -5,10 +5,38 @@
     android:id="@+id/navigation_graph"
     app:startDestination="@id/mainFragment">
 
+    <action
+        android:id="@+id/toHistory"
+        app:destination="@id/historyFragment" />
+
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.abanoub.photoweather.framework.presentation.features.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
     </fragment>
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.abanoub.photoweather.framework.presentation.features.history.HistoryFragment"
+        android:label="HistoryFragment"
+        tools:layout="@layout/fragment_history">
+
+        <action
+            android:id="@+id/toFullImage"
+            app:destination="@id/fullImageFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fullImageFragment"
+        android:name="com.abanoub.photoweather.framework.presentation.features.fullImage.FullImageDialog"
+        android:label="FullImageFragment"
+        tools:layout="@layout/dialog_full_image">
+        <argument
+            android:name="image"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
 </navigation>

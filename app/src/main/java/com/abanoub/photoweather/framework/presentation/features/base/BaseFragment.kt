@@ -9,11 +9,16 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.abanoub.photoweather.framework.presentation.features.main.MainActivityViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
 
     private var _binding: VB? = null
     protected val binding: VB get() = _binding!!
+    protected val mainViewModel: MainActivityViewModel by activityViewModels()
 
     abstract fun bindViews()
 

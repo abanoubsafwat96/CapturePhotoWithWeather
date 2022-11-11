@@ -41,4 +41,23 @@ object FileUtils {
         }
         return mediaFile
     }
+
+
+    fun getDataFromFile(): ArrayList<String> {
+        val historyList = ArrayList<String>()
+        val mediaStorageDir = File(
+            Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+            ), "PhotoWeatherApp"
+        )
+        val files = mediaStorageDir.listFiles()
+        if (files == null)
+            return historyList
+        else {
+            for (i in files.indices) {
+                historyList.add(files[i].path)
+            }
+        }
+        return historyList
+    }
 }

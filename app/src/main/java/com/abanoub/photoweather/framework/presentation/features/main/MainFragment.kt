@@ -21,6 +21,7 @@ import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.abanoub.photoweather.R
 import com.abanoub.photoweather.databinding.FragmentMainBinding
+import com.abanoub.photoweather.framework.presentation.enums.ToolbarType
 import com.abanoub.photoweather.framework.presentation.features.base.BaseFragment
 import com.abanoub.photoweather.framework.presentation.services.MyLocationService
 import com.abanoub.photoweather.framework.utils.BitmapUtils.rotate
@@ -87,6 +88,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun initUI() {
+        mainViewModel.updateToolbarType(ToolbarType.MAIN)
         onPictureTaken()
         listenOnBackPress()
     }
@@ -241,7 +243,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
 
     private fun assignAndSetupCameraHelper() {
         mCamera = getCameraInstance()
-        setupCameraHelper(mCamera!!)
+        mCamera?.let { setupCameraHelper(it) }
     }
 
     private fun setupCameraHelper(camera: Camera) {

@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:padding="1dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_height="200dp"
+    <data>
+        <variable
+            name="item"
+            type="String" />
+
+        <variable
+            name="listener"
+            type="com.abanoub.photoweather.framework.presentation.callback.OnItemClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        tools:ignore="ContentDescription" />
-</LinearLayout>
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            imageUrl="@{item}"
+            android:layout_height="200dp"
+            android:layout_width="match_parent"
+            android:onClick="@{()-> listener.onItemClicked(item)}"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+</layout>

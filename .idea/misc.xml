@@ -7,9 +7,13 @@
         <entry key="app/src/main/res/layout/activity_history.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_photo_captured.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/app_bar_layout.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/dialog_full_image.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/fragment_history.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/history_single_item.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/view_image_fragment.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.2421875" />
       </map>
     </option>
   </component>
