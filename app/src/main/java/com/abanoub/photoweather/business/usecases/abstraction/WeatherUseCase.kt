@@ -4,5 +4,5 @@ import com.abanoub.photoweather.business.entities.Response
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherUseCase {
-    suspend fun getWeatherData(): Flow<List<Response>>
+    suspend fun getWeatherData(latitude: Double, longitude: Double): Flow<List<Response>>
 }

@@ -2,4 +2,9 @@
     <string name="app_name">PhotoWeather</string>
     <string name="button">button</string>
     <string name="no_photos_in_history">No photos in history</string>
+    <string name="you_should_grant_permission_to_continue">You should grant permission to continue</string>
+    <string name="permission_needed">Permission Needed</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="discard">Discard</string>
+
 </resources>
