@@ -12,5 +12,5 @@ interface WeatherApi {
         @Query("lon") longitude: Double,
         @Query("cnt") count: Int,
         @Query("appid") api_key: String
-    ): List<Response>
+    ): Response
 }

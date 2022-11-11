@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class WeatherUseCaseImpl @Inject constructor(private val weatherRepository: WeatherRepository) :
     WeatherUseCase {
-    override suspend fun getWeatherData(latitude: Double, longitude: Double): Flow<List<Response>> = flow {
+    override suspend fun getWeatherData(latitude: Double, longitude: Double): Flow<Response> = flow {
         emit(weatherRepository.getWeatherData(latitude, longitude))
     }.flowOn(Dispatchers.IO)
 }

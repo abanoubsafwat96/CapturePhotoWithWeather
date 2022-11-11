@@ -69,10 +69,15 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     private fun registerLocationBroadCastReceiver() {
         locationBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                val longitude = intent.getDoubleExtra("longitude", 0.0)
-                val latitude = intent.getDoubleExtra("latitude", 0.0)
+                getWeatherData(intent)
             }
         }
+    }
+
+    private fun getWeatherData(intent: Intent) {
+        val longitude = intent.getDoubleExtra("longitude", 0.0)
+        val latitude = intent.getDoubleExtra("latitude", 0.0)
+        viewModel.getWeatherData(latitude, longitude)
     }
 
     private fun stopLocationService() {

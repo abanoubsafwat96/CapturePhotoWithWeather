@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(private val weatherUseCase: WeatherUseCa
                 .catch { _weatherDataState.value = DataState.Failure(it) }
                 .collect { data ->
 
-                    val responseList: ResponseList = data[0].list[0]
+                    val responseList: ResponseList = data.list[0]
                     val weatherData = (responseList.name + " , " +
                             (responseList.main.temp.toDouble() - 273.15).roundToInt() +
                             "°C" + " , " + responseList.weather[0].main)
