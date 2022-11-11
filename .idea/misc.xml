@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_done_white_24dp.xml" value="0.153" />
+        <entry key="app/src/main/res/layout/activity_history.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/activity_photo_captured.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/history_single_item.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/view_image_fragment.xml" value="0.19610507246376813" />
       </map>
     </option>
   </component>

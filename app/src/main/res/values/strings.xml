@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhotoWeather</string>
+    <string name="button">button</string>
+    <string name="no_photos_in_history">No photos in history</string>
 </resources>
