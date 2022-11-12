@@ -113,7 +113,8 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                 mCamera!!.takePicture(null, null, mPicture) // get an image from the camera
             } catch (e: java.lang.Exception) {
             }
-        }
+        }else
+            startCameraCheck()
     }
 
     private fun onCancelBtnClicked() {
