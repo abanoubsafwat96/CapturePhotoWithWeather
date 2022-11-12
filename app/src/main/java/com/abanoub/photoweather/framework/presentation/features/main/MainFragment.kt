@@ -123,14 +123,15 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun onCaptureBtnClicked() {
-        if (mCamera != null && mPicture != null) {
-            try {
-                mCamera!!.takePicture(null, null, mPicture) // get an image from the camera
-            } catch (e: Exception) {
-                activity?.showSnackBar(getString(R.string.error_in_camera))
-            }
-        } else
-            startCameraCheck()
+        mCamera?.let {
+            mPicture?.let {
+                try {
+                    mCamera?.takePicture(null, null, mPicture) // get an image from the camera
+                } catch (e: Exception) {
+                    activity?.showSnackBar(getString(R.string.error_in_camera))
+                }
+            } ?: startCameraCheck()
+        } ?: startCameraCheck()
     }
 
     private fun onCancelBtnClicked() {
@@ -139,13 +140,11 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
 
     private fun onAddWeatherDataBtnClicked() {
         if (isNetworkAvailable(requireContext())) {
-            if (realImage != null && weatherData != null) {
-                realImage?.let { realCapturedImage ->
-                    weatherData?.let { weatherLine ->
-                        realImageWithWeatherData =
-                            writeTextOnDrawable(requireContext(), realCapturedImage, weatherLine)
-                        onAddWeatherDataSuccessed(realImageWithWeatherData)
-                    }
+            realImage?.let { realCapturedImage ->
+                weatherData?.let { weatherLine ->
+                    realImageWithWeatherData =
+                        writeTextOnDrawable(requireContext(), realCapturedImage, weatherLine)
+                    onAddWeatherDataSuccessed(realImageWithWeatherData)
                 }
             }
         } else {
@@ -154,18 +153,19 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun onDoneBtnClicked() {
-        if (pictureFile != null && realImage != null) {
-            if (isExternalStorageWritable()) {
-                saveImageToFile()
+        pictureFile?.let {
+            realImage?.let {
+                if (isExternalStorageWritable()) {
+                    saveImageToFile()
+                }
             }
         }
     }
 
     private fun onShareBtnClicked() {
-        if (savedImageUri != null)
-            shareImageUri(savedImageUri)
-        else
-            errorPhotoNotSaved()
+        savedImageUri?.let {
+            shareImageUri(it)
+        } ?: errorPhotoNotSaved()
     }
 
     private fun startCameraCheck() {
@@ -233,7 +233,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         binding.isWeatherDataSet = false
         binding.isImageSaved = false
 
-        if (mPreview != null) {
+        mPreview?.let {
             binding.cameraContainer.removeView(mPreview)
             binding.cameraContainer.addView(mPreview)
         }
@@ -312,21 +312,19 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun saveImageToFile() {
-        if (pictureFile != null) {
+        pictureFile?.let {
             try {
                 var fos: FileOutputStream? = FileOutputStream(pictureFile)
                 if (isAddWeatherDataBtnVisible()) {
-                    if (realImage != null) realImage!!.compress(
-                        Bitmap.CompressFormat.JPEG,
-                        100,
-                        fos
-                    )
+                    realImage?.let {
+                        realImage?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                    }
                 } else {
                     realImageWithWeatherData?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                         ?: return
                 }
                 savedImageUri = onSavePhotoSuccessfully(pictureFile)
-                fos!!.close()
+                fos?.close()
                 fos = null
                 realImage = null
             } catch (e: FileNotFoundException) {
