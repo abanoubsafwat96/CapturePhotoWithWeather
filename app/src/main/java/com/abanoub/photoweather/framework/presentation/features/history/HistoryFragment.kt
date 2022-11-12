@@ -50,9 +50,5 @@ class HistoryFragment: BaseFragment<FragmentHistoryBinding>() {
         findNavController().navigateSafe(HistoryFragmentDirections.toFullImage(history_item))
     }
 
-    private fun errorAllowStoragePermission() {
-        activity?.showSnackBar("Allow reading storage permission to be worked")
-    }
-
     override fun getLayoutResId(): Int = R.layout.fragment_history
 }

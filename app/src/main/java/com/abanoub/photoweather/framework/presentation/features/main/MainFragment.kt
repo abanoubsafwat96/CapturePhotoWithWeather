@@ -13,6 +13,9 @@ import android.util.Log
 import android.view.Surface
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -61,6 +64,15 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     private var savedImageUri: Uri? = null
     private var weatherData: String? = null
     private var realImageWithWeatherData: Bitmap? = null
+
+    private val resolutionForResult =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { activityResult ->
+            if (activityResult.resultCode == AppCompatActivity.RESULT_OK)
+                startLocationService()
+            else {
+                showMessage("we can't determine your location")
+            }
+        }
 
     override fun bindViews() {
         initUI()
@@ -113,7 +125,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                 mCamera!!.takePicture(null, null, mPicture) // get an image from the camera
             } catch (e: java.lang.Exception) {
             }
-        }else
+        } else
             startCameraCheck()
     }
 
@@ -180,7 +192,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
 
     private fun startCameraAndLocation() {
         setupCamera()
-        startLocationService()
+        checkLocationSettings()
     }
 
     private fun onPictureTaken() {
@@ -350,7 +362,6 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         startActivity(intent)
     }
 
-
     private fun errorCheckNetworkConnection() {
         activity?.showSnackBar("Check your network connection")
     }
@@ -359,41 +370,16 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         activity?.showSnackBar("You must save photo first")
     }
 
-    private fun listenOnBackPress() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    onBackPressed()
-                }
-            })
-    }
-
-    fun onBackPressed() {
-        if (binding.imageConstraintLayout.getVisibility() == View.VISIBLE) {
-            hidePhotoViewerAndShowCamera()
-        } else{
-            closeTheApp()
-        }
-    }
-
-    private fun closeTheApp() {
-        activity?.moveTaskToBack(true)
-        activity?.finish()
-    }
-
-    private fun startLocationService() {
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(createLocationRequest())
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(createLocationRequest())
         val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
-        val task: Task<LocationSettingsResponse> =
-            client.checkLocationSettings(builder.build())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
 
         task.addOnSuccessListener {
             // All location settings are satisfied. The client can initialize
             // location requests here.
             // ...
-            activity?.startService(getLocationServiceIntent())
+            startLocationService()
         }
 
         task.addOnFailureListener { exception ->
@@ -403,10 +389,9 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                 try {
                     // Show the dialog by calling startResolutionForResult(),
                     // and check the result in onActivityResult().
-                    exception.startResolutionForResult(
-                        requireActivity(),
-                        5
-                    )
+                    val intentSenderRequest =
+                        IntentSenderRequest.Builder(exception.resolution).build()
+                    resolutionForResult.launch(intentSenderRequest)
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
                     activity?.showSnackBar("error in location settings")
@@ -437,6 +422,10 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         viewModel.getWeatherData(latitude, longitude)
     }
 
+    private fun startLocationService() {
+        activity?.startService(getLocationServiceIntent())
+    }
+
     private fun stopLocationService() {
         activity?.stopService(getLocationServiceIntent())
     }
@@ -457,6 +446,29 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                 .unregisterReceiver(locationBroadcastReceiver)
     }
 
+    private fun listenOnBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackPressed()
+                }
+            })
+    }
+
+    fun onBackPressed() {
+        if (binding.imageConstraintLayout.getVisibility() == View.VISIBLE) {
+            hidePhotoViewerAndShowCamera()
+        } else {
+            closeTheApp()
+        }
+    }
+
+    private fun closeTheApp() {
+        activity?.moveTaskToBack(true)
+        activity?.finish()
+    }
+
     override fun getLayoutResId(): Int = R.layout.fragment_main
 
     override fun onDestroy() {
@@ -465,6 +477,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         realImageWithWeatherData = null
         stopLocationService()
         permissionManager.clean()
+        resolutionForResult.unregister()
         super.onDestroy()
     }
 }
