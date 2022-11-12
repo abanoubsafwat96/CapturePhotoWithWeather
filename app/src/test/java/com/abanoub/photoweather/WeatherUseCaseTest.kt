@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class PremiumContentUseCaseTest {
+class WeatherUseCaseTest {
 
     private lateinit var useCase: WeatherUseCase
     private lateinit var throwableUseCase: WeatherUseCase
