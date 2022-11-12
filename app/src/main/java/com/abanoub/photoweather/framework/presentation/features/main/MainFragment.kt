@@ -70,7 +70,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
             if (activityResult.resultCode == AppCompatActivity.RESULT_OK)
                 startLocationService()
             else {
-                showMessage("we can't determine your location")
+                activity?.showSnackBar(getString(R.string.we_cannot_determine_your_location))
             }
         }
 
@@ -123,7 +123,8 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         if (mCamera != null && mPicture != null) {
             try {
                 mCamera!!.takePicture(null, null, mPicture) // get an image from the camera
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
+                activity?.showSnackBar(getString(R.string.error_in_camera))
             }
         } else
             startCameraCheck()
@@ -178,7 +179,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun errorDeviceNotSupportCamera() {
-        activity?.showSnackBar("Device doesn't support camera")
+        activity?.showSnackBar(getString(R.string.device_doesnnot_support_camera))
     }
 
     private fun requestCameraPermissionsIfNotGranted() {
@@ -344,7 +345,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun onSavePhotoSuccessfully(pictureFile: File?): Uri? {
-        activity?.showSnackBar("Photo saved successfully")
+        activity?.showSnackBar(getString(R.string.photo_saved_successfully))
         binding.done.setVisibility(View.INVISIBLE)
         binding.addWeatherData.setVisibility(View.INVISIBLE)
         return FileProvider.getUriForFile(
@@ -363,11 +364,11 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun errorCheckNetworkConnection() {
-        activity?.showSnackBar("Check your network connection")
+        activity?.showSnackBar(getString(R.string.check_your_network_connection))
     }
 
     private fun errorPhotoNotSaved() {
-        activity?.showSnackBar("You must save photo first")
+        activity?.showSnackBar(getString(R.string.you_must_save_photo_first))
     }
 
     private fun checkLocationSettings() {
@@ -394,7 +395,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                     resolutionForResult.launch(intentSenderRequest)
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
-                    activity?.showSnackBar("error in location settings")
+                    activity?.showSnackBar(getString(R.string.error_in_location_settings))
                 }
             }
         }

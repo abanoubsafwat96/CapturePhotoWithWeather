@@ -2,7 +2,7 @@ package com.abanoub.photoweather.framework.utils
 
 interface Constants {
     object Constants {
-        val MEDIA_TYPE_IMAGE = 1
+        const val MEDIA_TYPE_IMAGE = 1
     }
 
     interface Location {

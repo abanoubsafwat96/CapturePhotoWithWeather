@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.abanoub.photoweather.business.entities.ResponseList
 import com.abanoub.photoweather.business.usecases.abstraction.WeatherUseCase
 import com.abanoub.photoweather.framework.utils.DataState
+import com.abanoub.photoweather.framework.utils.convertToCelsius
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -31,7 +32,7 @@ class MainViewModel @Inject constructor(private val weatherUseCase: WeatherUseCa
 
                     val responseList: ResponseList = data.list[0]
                     val weatherData = (responseList.name + " , " +
-                            (responseList.main.temp.toDouble() - 273.15).roundToInt() +
+                            responseList.main.temp.toDouble().convertToCelsius().roundToInt() +
                             "°C" + " , " + responseList.weather[0].main)
 
                     _weatherDataState.value = DataState.Success(weatherData)

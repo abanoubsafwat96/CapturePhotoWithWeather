@@ -1,5 +1,6 @@
 package com.abanoub.photoweather.framework.presentation.features.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.Camera
 import android.util.Log
@@ -10,9 +11,19 @@ import java.io.IOException
 /**
  * A basic Camera preview class
  */
+@SuppressLint("ViewConstructor")
 class CameraPreview(context: Context?, private val mCamera: Camera) :
     SurfaceView(context), SurfaceHolder.Callback {
-    private val mHolder: SurfaceHolder
+    private val mHolder: SurfaceHolder = holder
+
+    init {
+        // Install a SurfaceHolder.Callback so we get notified when the
+        // underlying surface is created and destroyed.
+        mHolder.addCallback(this)
+        // deprecated setting, but required on Android versions prior to 3.0
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
+    }
+
     override fun surfaceCreated(holder: SurfaceHolder) {
         // The Surface has been created, now tell the camera where to draw the preview.
         try {
@@ -50,17 +61,7 @@ class CameraPreview(context: Context?, private val mCamera: Camera) :
             mCamera.setPreviewDisplay(mHolder)
             mCamera.startPreview()
         } catch (e: Exception) {
-            Log.d("Errstartingpreview:", e.message!!)
+            Log.d("error preview:", e.message!!)
         }
-    }
-
-    init {
-
-        // Install a SurfaceHolder.Callback so we get notified when the
-        // underlying surface is created and destroyed.
-        mHolder = holder
-        mHolder.addCallback(this)
-        // deprecated setting, but required on Android versions prior to 3.0
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS)
     }
 }

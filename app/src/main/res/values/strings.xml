@@ -7,5 +7,12 @@
     <string name="open_settings">Open Settings</string>
     <string name="discard">Discard</string>
     <string name="history">History</string>
+    <string name="error_in_location_settings">error in location settings</string>
+    <string name="you_must_save_photo_first">You must save photo first</string>
+    <string name="check_your_network_connection">Check your network connection</string>
+    <string name="photo_saved_successfully">Photo saved successfully</string>
+    <string name="we_cannot_determine_your_location">we can\'t determine your location</string>
+    <string name="device_doesnnot_support_camera">Device doesn\'t support camera</string>
+    <string name="error_in_camera">error in camera</string>
 
 </resources>

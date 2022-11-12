@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -31,7 +30,6 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
         bindViews()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,11 +37,6 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     ): View? {
         _binding = DataBindingUtil.inflate(inflater, getLayoutResId(), container, false)
         return binding.root
-    }
-
-
-    protected fun showMessage(error: String) {
-        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

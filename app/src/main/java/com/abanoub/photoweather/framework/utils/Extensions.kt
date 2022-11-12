@@ -19,3 +19,5 @@ fun Fragment.openAppPermissionsSettings() {
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent)
 }
+
+fun Double.convertToCelsius() = this - 273.15
