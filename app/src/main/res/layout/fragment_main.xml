@@ -4,7 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
 
+        <variable
+            name="enableCamera"
+            type="Boolean" />
+
+        <variable
+            name="enablePreview"
+            type="Boolean" />
+
+        <variable
+            name="isWeatherDataSet"
+            type="Boolean" />
+
+        <variable
+            name="isImageSaved"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,23 +30,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cameraContainer"
+            android:visibility="@{enableCamera ? View.VISIBLE : View.GONE}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <FrameLayout
-                android:id="@+id/camera_preview"
+                android:id="@+id/cameraPreview"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="50dp"
-                android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@id/button_capture"
+                app:layout_constraintBottom_toTopOf="@id/buttonCapture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/button_capture"
+                android:id="@+id/buttonCapture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -47,7 +63,7 @@
             android:id="@+id/imageConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
+            android:visibility="@{enablePreview ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +102,7 @@
                     android:id="@+id/addWeatherData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="@{isWeatherDataSet ? View.INVISIBLE : View.VISIBLE}"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="20dp"
                     android:src="@drawable/ic_cloud_queue_white_24dp"
@@ -97,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="20dp"
+                    android:visibility="@{isImageSaved ? View.INVISIBLE : View.VISIBLE}"
                     android:src="@drawable/ic_done_white_24dp"
                     tools:ignore="ContentDescription" />
 

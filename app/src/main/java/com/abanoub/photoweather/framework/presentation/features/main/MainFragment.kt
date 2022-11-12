@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.view.Surface
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -101,6 +100,10 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
 
     private fun initUI() {
         mainViewModel.updateToolbarType(ToolbarType.MAIN)
+        binding.enableCamera = true
+        binding.enablePreview = false
+        binding.isWeatherDataSet = false
+        binding.isImageSaved = false
         onPictureTaken()
         listenOnBackPress()
     }
@@ -218,19 +221,18 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun hideCameraAndShowPhotoViewer() {
-        binding.cameraContainer.setVisibility(View.GONE)
-        binding.buttonCapture.setVisibility(View.GONE)
-        binding.imageConstraintLayout.setVisibility(View.VISIBLE)
-        if (binding.done.getVisibility() == View.INVISIBLE) binding.done.setVisibility(View.VISIBLE)
-        if (binding.addWeatherData.getVisibility() == View.INVISIBLE) binding.addWeatherData.setVisibility(
-            View.VISIBLE
-        )
+        binding.enableCamera = false
+        binding.enablePreview = true
+        binding.isWeatherDataSet = false
+        binding.isImageSaved = false
     }
 
     private fun hidePhotoViewerAndShowCamera() {
-        binding.imageConstraintLayout.setVisibility(View.GONE)
-        binding.cameraContainer.setVisibility(View.VISIBLE)
-        binding.buttonCapture.setVisibility(View.VISIBLE)
+        binding.enableCamera = true
+        binding.enablePreview = false
+        binding.isWeatherDataSet = false
+        binding.isImageSaved = false
+
         if (mPreview != null) {
             binding.cameraContainer.removeView(mPreview)
             binding.cameraContainer.addView(mPreview)
@@ -335,19 +337,18 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
         }
     }
 
-    private fun isAddWeatherDataBtnVisible(): Boolean {
-        return binding.addWeatherData.getVisibility() == View.VISIBLE
-    }
+    private fun isAddWeatherDataBtnVisible() =
+        binding.isWeatherDataSet == false || binding.isWeatherDataSet == null
 
     private fun onAddWeatherDataSuccessed(realImageWithWeatherData: Bitmap?) {
         binding.imageView.setImageBitmap(realImageWithWeatherData)
-        binding.addWeatherData.setVisibility(View.INVISIBLE)
+        binding.isWeatherDataSet = true
     }
 
     private fun onSavePhotoSuccessfully(pictureFile: File?): Uri? {
         activity?.showSnackBar(getString(R.string.photo_saved_successfully))
-        binding.done.setVisibility(View.INVISIBLE)
-        binding.addWeatherData.setVisibility(View.INVISIBLE)
+        binding.isImageSaved = true
+        binding.isWeatherDataSet = true
         return FileProvider.getUriForFile(
             requireContext(),
             "com.abanoub.photoweather.provider",  //(use your app signature + ".provider" )
@@ -458,7 +459,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     fun onBackPressed() {
-        if (binding.imageConstraintLayout.getVisibility() == View.VISIBLE) {
+        if (binding.enablePreview == true) {
             hidePhotoViewerAndShowCamera()
         } else {
             closeTheApp()
@@ -473,12 +474,13 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     override fun getLayoutResId(): Int = R.layout.fragment_main
 
     override fun onDestroy() {
+        stopLocationService()
+        mCamera?.release()
+        permissionManager.clean()
+        resolutionForResult.unregister()
         mCamera = null
         realImage = null
         realImageWithWeatherData = null
-        stopLocationService()
-        permissionManager.clean()
-        resolutionForResult.unregister()
         super.onDestroy()
     }
 }
