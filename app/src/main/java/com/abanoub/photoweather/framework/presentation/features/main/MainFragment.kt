@@ -1,10 +1,7 @@
 package com.abanoub.photoweather.framework.presentation.features.main
 
 import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.Camera
@@ -35,6 +32,9 @@ import com.abanoub.photoweather.framework.utils.isNetworkAvailable
 import com.abanoub.photoweather.framework.utils.permissions.Permission
 import com.abanoub.photoweather.framework.utils.permissions.PermissionManager
 import com.abanoub.photoweather.framework.utils.showSnackBar
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -382,7 +382,42 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun startLocationService() {
-        activity?.startService(getLocationServiceIntent())
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(createLocationRequest())
+        val client: SettingsClient = LocationServices.getSettingsClient(requireActivity())
+        val task: Task<LocationSettingsResponse> =
+            client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // All location settings are satisfied. The client can initialize
+            // location requests here.
+            // ...
+            activity?.startService(getLocationServiceIntent())
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                // Location settings are not satisfied, but this can be fixed
+                // by showing the user a dialog.
+                try {
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult().
+                    exception.startResolutionForResult(
+                        requireActivity(),
+                        5
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    // Ignore the error.
+                    activity?.showSnackBar("error in location settings")
+                }
+            }
+        }
+    }
+
+    private fun createLocationRequest() = LocationRequest.create().apply {
+        interval = 5000
+        fastestInterval = 5000
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
     private fun getLocationServiceIntent() = Intent(context, MyLocationService::class.java)
