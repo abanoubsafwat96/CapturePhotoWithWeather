@@ -1,7 +1,6 @@
 package com.abanoub.photoweather.framework.presentation.features.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -33,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeOnObservers() {
         mainViewModel.toolbarTypeLiveData.observe(this) {
             when (it) {
-                ToolbarType.MAIN -> binding.toolbar.historyTV.visibility = View.VISIBLE
-                ToolbarType.HISTORY ->  binding.toolbar.historyTV.visibility = View.INVISIBLE
+                ToolbarType.MAIN -> binding.toolbar.showHistory = true
+                ToolbarType.HISTORY ->  binding.toolbar.showHistory = false
                 else -> {}
             }
         }

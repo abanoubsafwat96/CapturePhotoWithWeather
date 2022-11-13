@@ -1,6 +1,11 @@
 package com.abanoub.photoweather.framework.utils
 
+import kotlin.random.Random
+
 interface Constants {
+    object Camera{
+        @JvmField val PIC_FILE_NAME = Random.nextInt(7).toString()+".jpg"
+    }
     object Constants {
         const val MEDIA_TYPE_IMAGE = 1
     }
