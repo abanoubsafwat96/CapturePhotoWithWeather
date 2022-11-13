@@ -29,6 +29,7 @@ import com.abanoub.photoweather.framework.presentation.enums.ToolbarType
 import com.abanoub.photoweather.framework.presentation.features.base.BaseFragment
 import com.abanoub.photoweather.framework.presentation.features.main.camera.*
 import com.abanoub.photoweather.framework.presentation.services.MyLocationService
+import com.abanoub.photoweather.framework.utils.BitmapUtils.rotate
 import com.abanoub.photoweather.framework.utils.BitmapUtils.writeTextOnDrawable
 import com.abanoub.photoweather.framework.utils.Constants.Camera.PIC_FILE_NAME
 import com.abanoub.photoweather.framework.utils.Constants.Constants.MEDIA_TYPE_IMAGE
@@ -689,6 +690,7 @@ class MainFragment @Inject constructor() : BaseFragment<FragmentMainBinding>() {
                     }
                     realImage = BitmapFactory.decodeFile(file?.path)
                     realImage?.let {
+                        //rotate image with same camera angle
                         activity?.runOnUiThread {
                             setBitmapToImageView(realImage)
                             hideCameraAndShowPhotoViewer()
